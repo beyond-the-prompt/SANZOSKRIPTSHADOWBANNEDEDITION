@@ -1,0 +1,1284 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>SanZosKripT</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', system-ui, sans-serif; background:#000; color:#fff; position: relative; line-height: 1.5; transition: background-color 0.3s ease; }
+    .script-font { font-family: 'Cinzel', serif; letter-spacing: 0.05em; }
+    .chrome { color: #d0d0d0; text-shadow: 0 1px 1px rgba(0,0,0,0.6), 0 -1px 1px rgba(255,255,255,0.2); }
+    .metallic-btn { background: linear-gradient(145deg, #e0e0e0, #a0a0a0); color: #000; box-shadow: 0 0 15px rgba(0,255,255,0.5), 0 4px 6px rgba(0,0,0,0.5); transition: all 0.2s; border-radius: 1.5rem; font-weight: 600; }
+    .metallic-btn:hover { transform: scale(1.02); box-shadow: 0 0 20px rgba(0,255,255,0.6), 0 6px 8px rgba(0,0,0,0.6); }
+    .metallic-btn:active { transform: scale(0.98); }
+    .metallic-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none !important; }
+    .shimmer { animation: shimmer 3s infinite linear; background: linear-gradient(90deg, transparent, rgba(192,192,192,0.3), transparent); background-size: 200% 100%; }
+    @keyframes shimmer { 0% { background-position: -200% 0 } 100% { background-position: 200% 0 } }
+    .matte { background: #0a0a0a; }
+    .hidden { display: none !important; }
+    .nav-btn { color: #888; transition: all .2s; display: flex; flex-direction: column; align-items: center; font-size: 0.75rem; }
+    .nav-btn-active { color: #c0c0c0 !important; }
+    .nav-btn:hover { transform: translateY(-2px); }
+
+    body::before {
+      content: 'BARBANZO SCRIPT BARBANZO SCRIPT BARBANZO SCRIPT BARBANZO SCRIPT BARBANZO SCRIPT';
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      color: rgba(192,192,192,0.05);
+      font-size: 10rem;
+      font-family: 'Cinzel', serif;
+      white-space: nowrap;
+      overflow: hidden;
+      line-height: 1;
+      transform: rotate(-10deg);
+      pointer-events: none;
+      z-index: -1;
+      animation: subtle-move 30s linear infinite;
+    }
+    @keyframes subtle-move { 0% { transform: translateX(0) rotate(-10deg); } 100% { transform: translateX(-30%) rotate(-10deg); } }
+
+    input, textarea, select {
+      border-color: rgba(0,255,255,0.3) !important;
+      box-shadow: 0 0 5px rgba(0,255,255,0.2);
+      background: #111 !important;
+      color: #fff !important;
+      border-radius: 9999px !important;
+      font-size: 1rem;
+      padding: 1rem;
+      resize: vertical;
+      transition: box-shadow 0.3s ease;
+    }
+    textarea { border-radius: 1rem !important; min-height: 80px; }
+    select { border-radius: 9999px !important; min-height: unset; padding: 0.75rem 1rem; cursor: pointer; }
+    select option { background: #111; }
+    input:focus, textarea:focus, select:focus { border-color: rgba(0,255,255,0.8) !important; box-shadow: 0 0 10px rgba(0,255,255,0.4); outline: none; }
+
+    .preset-btn { background: #222; color: #fff; border-radius: 9999px; padding: 0.75rem 1.25rem; font-size: 1rem; font-weight: 600; transition: transform 0.2s; border: 1px solid #333; }
+    .preset-btn:hover { transform: scale(1.05); }
+    .preset-btn.active-preset { background: #0a2a2a; border-color: rgba(0,255,255,0.6); color: #0ff; }
+
+    .chip-btn { background: #1a1a1a; color: #888; border-radius: 9999px; padding: 0.4rem 1rem; font-size: 0.8rem; font-weight: 600; transition: all 0.15s; border: 1px solid #333; cursor: pointer; }
+    .chip-btn:hover { border-color: rgba(0,255,255,0.4); color: #ccc; }
+    .chip-btn.chip-active { background: #0a2a2a; border-color: rgba(0,255,255,0.6); color: #0ff; }
+
+    .history-item { background: #111; border-radius: 1rem; padding: 1.25rem; margin-bottom: 0.75rem; position: relative; font-size: 1rem; transition: opacity 0.3s ease; }
+    .history-item:hover { opacity: 0.9; }
+    .history-view-btn { background: #333; color: #fff; border-radius: 0.5rem; padding: 0.5rem 1rem; font-size: 0.875rem; font-weight: 600; border: none; cursor: pointer; }
+    .history-delete-btn { position: absolute; top: 0.5rem; right: 0.5rem; color: #f00; background: none; border: none; cursor: pointer; }
+
+    footer { background: #0a0a0a; border-top: 1px solid #333; transition: background-color 0.3s ease; }
+
+    #output-modal { background: rgba(0,0,0,0.85); }
+    #output-content { background: #111; border: 1px solid #333; max-height: 80vh; overflow-y: auto; font-size: 1rem; line-height: 1.6; animation: fadeIn 0.3s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+    label { font-weight: 600; letter-spacing: 0.05em; }
+    p, div { font-size: 1rem; }
+
+    /* Streaming cursor */
+    .stream-cursor { display: inline-block; width: 2px; height: 1em; background: #0ff; animation: blink 0.7s step-end infinite; vertical-align: text-bottom; margin-left: 2px; }
+    @keyframes blink { 0%,100% { opacity:1; } 50% { opacity:0; } }
+
+    /* Output box inside modal */
+    #modal-output { font-family: monospace; font-size: 0.9rem; white-space: pre-wrap; word-break: break-word; min-height: 80px; }
+
+    /* TTS progress */
+    .tts-speaking { border-color: rgba(0,255,255,0.8) !important; box-shadow: 0 0 20px rgba(0,255,255,0.3) !important; }
+
+    /* Scene item */
+    .scene-row { display: flex; gap: 8px; align-items: flex-start; margin-bottom: 8px; }
+    .scene-num-badge { background: rgba(0,255,255,0.1); border: 1px solid rgba(0,255,255,0.3); color: #0ff; border-radius: 50%; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; flex-shrink: 0; margin-top: 14px; }
+    .scene-del-btn { color: #555; background: none; border: none; cursor: pointer; font-size: 1.1rem; flex-shrink: 0; margin-top: 14px; transition: color 0.15s; }
+    .scene-del-btn:hover { color: #f55; }
+    .scene-textarea { flex: 1; min-height: 60px !important; }
+
+    /* Range sliders */
+    input[type="range"] { border: none !important; box-shadow: none !important; background: #333 !important; border-radius: 4px !important; padding: 0 !important; height: 6px !important; cursor: pointer; }
+    input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 18px; height: 18px; border-radius: 50%; background: linear-gradient(145deg, #e0e0e0, #a0a0a0); cursor: pointer; }
+
+    /* Spinner */
+    .spin { display: inline-block; width: 14px; height: 14px; border: 2px solid rgba(0,0,0,0.3); border-top-color: #000; border-radius: 50%; animation: spin 0.7s linear infinite; vertical-align: middle; margin-right: 6px; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Section label style */
+    .section-label { color: #888; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 6px; font-weight: 600; }
+  </style>
+</head>
+<body class="min-h-screen overflow-x-hidden pb-24">
+
+  <!-- SPLASH -->
+  <div id="splash" class="fixed inset-0 flex flex-col items-center justify-center z-50 matte">
+    <div class="text-center">
+      <h1 class="text-7xl font-black tracking-tighter script-font chrome shimmer">Barbanzo</h1>
+      <p class="text-white text-3xl tracking-widest mt-2 script-font">Script</p>
+      <p class="mt-12 text-sm text-zinc-400">Michael Sanzo • William Barbeau</p>
+    </div>
+    <button onclick="enterAcademy()" class="mt-20 px-12 py-6 metallic-btn font-bold tracking-widest">
+      ENTER THE RITUAL
+    </button>
+  </div>
+
+  <!-- APP -->
+  <div id="app" class="hidden min-h-screen">
+
+    <!-- HOME -->
+    <div id="home" class="pt-20 max-w-md mx-auto px-6">
+      <h2 class="text-4xl font-black chrome script-font mb-4 text-center">Barbanzo Script</h2>
+      <p class="text-white text-xl text-center mb-8">Master Script Prompt Engineering</p>
+      
+      <div class="bg-zinc-950 border border-gray-700 p-8 rounded-3xl text-sm leading-relaxed max-h-[30vh] overflow-y-auto mb-8">
+        I started all of this with a broken smartphone and a computer in a motel room...<br><br>
+        BARBANZO SCRIPT wasn't born in a classroom. It was born in silence, in repetition, in instinct, in discipline...<br><br>
+        — Brother (Michael Sanzo)
+      </div>
+
+      <div class="mb-6">
+        <p class="section-label">PROMPT INPUT</p>
+        <input id="prompt-input" type="text" class="w-full" placeholder="Enter your prompt here...">
+      </div>
+
+      <div class="mb-6">
+        <p class="section-label">STYLE PRESETS</p>
+        <div class="flex space-x-2">
+          <button class="preset-btn flex-1" onclick="selectPreset('Elegant',this)">Elegant</button>
+          <button class="preset-btn flex-1" onclick="selectPreset('Custom',this)">Custom</button>
+          <button class="preset-btn flex-1" onclick="selectPreset('Classic',this)">Classic</button>
+        </div>
+      </div>
+
+      <button onclick="generateScript()" id="home-gen-btn" class="w-full py-6 metallic-btn font-black text-xl mb-8">GENERATE</button>
+
+      <div id="history-section" class="mb-8">
+        <p class="section-label">HISTORY</p>
+        <div id="history-list"></div>
+      </div>
+
+      <button onclick="navTo('image')" class="w-full py-4 metallic-btn font-bold mb-4">🖼 Image Prompt Builder</button>
+      <button onclick="navTo('video')" class="w-full py-4 metallic-btn font-bold mb-4">🎬 Video Prompt Builder</button>
+      <button onclick="navTo('narrative')" class="w-full py-4 metallic-btn font-bold mb-4">📖 Narrative Generator</button>
+      <button onclick="navTo('tts')" class="w-full py-4 metallic-btn font-bold mb-4">🔊 Text-to-Speech</button>
+      <button onclick="navTo('beginner')" class="w-full py-4 metallic-btn font-bold mb-4">Beginner Builder</button>
+      <button onclick="navTo('expert')" class="w-full py-4 metallic-btn font-bold mb-4">Expert Editor</button>
+    </div>
+
+    <!-- ████████████████████  IMAGE PROMPT BUILDER  ████████████████████ -->
+    <div id="image" class="hidden pt-20 max-w-md mx-auto px-6">
+      <h2 class="text-3xl font-black chrome script-font mb-2 text-center">IMAGE PROMPTS</h2>
+      <p class="text-gray-400 text-sm text-center mb-8">Build optimized prompts for Midjourney, DALL·E, Flux &amp; more</p>
+
+      <div class="mb-5">
+        <p class="section-label">SUBJECT / SCENE</p>
+        <textarea id="img-subject" rows="3" placeholder="a lone astronaut standing in an overgrown greenhouse on Mars, morning light filtering through cracked glass panels..."></textarea>
+      </div>
+
+      <div class="mb-5">
+        <p class="section-label">STYLE</p>
+        <div class="flex flex-wrap gap-2" id="img-style-group">
+          <button class="chip-btn" data-group="img-style" data-val="photorealistic">photorealistic</button>
+          <button class="chip-btn" data-group="img-style" data-val="cinematic film">cinematic</button>
+          <button class="chip-btn" data-group="img-style" data-val="oil painting">oil painting</button>
+          <button class="chip-btn" data-group="img-style" data-val="watercolor">watercolor</button>
+          <button class="chip-btn" data-group="img-style" data-val="concept art">concept art</button>
+          <button class="chip-btn" data-group="img-style" data-val="anime">anime</button>
+          <button class="chip-btn" data-group="img-style" data-val="3D render">3D render</button>
+          <button class="chip-btn" data-group="img-style" data-val="noir photography">noir</button>
+        </div>
+      </div>
+
+      <div class="mb-5">
+        <p class="section-label">MOOD</p>
+        <div class="flex flex-wrap gap-2">
+          <button class="chip-btn" data-group="img-mood" data-val="melancholic">melancholic</button>
+          <button class="chip-btn" data-group="img-mood" data-val="epic and grand">epic</button>
+          <button class="chip-btn" data-group="img-mood" data-val="intimate and quiet">intimate</button>
+          <button class="chip-btn" data-group="img-mood" data-val="tense and foreboding">tense</button>
+          <button class="chip-btn" data-group="img-mood" data-val="dreamlike">dreamlike</button>
+          <button class="chip-btn" data-group="img-mood" data-val="vibrant and joyful">vibrant</button>
+          <button class="chip-btn" data-group="img-mood" data-val="eerie and unsettling">eerie</button>
+        </div>
+      </div>
+
+      <div class="mb-5">
+        <p class="section-label">LIGHTING</p>
+        <div class="flex flex-wrap gap-2">
+          <button class="chip-btn" data-group="img-light" data-val="golden hour">golden hour</button>
+          <button class="chip-btn" data-group="img-light" data-val="dramatic chiaroscuro">chiaroscuro</button>
+          <button class="chip-btn" data-group="img-light" data-val="soft overcast">overcast</button>
+          <button class="chip-btn" data-group="img-light" data-val="neon glow">neon</button>
+          <button class="chip-btn" data-group="img-light" data-val="candlelight">candlelight</button>
+          <button class="chip-btn" data-group="img-light" data-val="harsh midday sun">harsh sun</button>
+          <button class="chip-btn" data-group="img-light" data-val="moonlit night">moonlit</button>
+          <button class="chip-btn" data-group="img-light" data-val="volumetric god rays">god rays</button>
+        </div>
+      </div>
+
+      <div class="mb-5">
+        <p class="section-label">CAMERA / LENS</p>
+        <div class="flex flex-wrap gap-2">
+          <button class="chip-btn" data-group="img-cam" data-val="wide angle 24mm">wide 24mm</button>
+          <button class="chip-btn" data-group="img-cam" data-val="portrait 85mm f/1.4">portrait 85mm</button>
+          <button class="chip-btn" data-group="img-cam" data-val="aerial drone shot">aerial drone</button>
+          <button class="chip-btn" data-group="img-cam" data-val="macro extreme closeup">macro</button>
+          <button class="chip-btn" data-group="img-cam" data-val="fisheye lens">fisheye</button>
+          <button class="chip-btn" data-group="img-cam" data-val="medium format film">medium format</button>
+          <button class="chip-btn" data-group="img-cam" data-val="tilt-shift miniature">tilt-shift</button>
+        </div>
+      </div>
+
+      <div class="mb-5">
+        <p class="section-label">TARGET AI</p>
+        <select id="img-target">
+          <option value="Midjourney">Midjourney</option>
+          <option value="DALL-E 3">DALL·E 3</option>
+          <option value="Stable Diffusion / Flux">Stable Diffusion / Flux</option>
+          <option value="Adobe Firefly">Adobe Firefly</option>
+          <option value="Ideogram">Ideogram</option>
+        </select>
+      </div>
+
+      <div class="mb-5">
+        <p class="section-label">ASPECT RATIO</p>
+        <select id="img-ar">
+          <option value="--ar 16:9">16:9 landscape</option>
+          <option value="--ar 9:16">9:16 portrait / mobile</option>
+          <option value="--ar 1:1">1:1 square</option>
+          <option value="--ar 4:3">4:3 classic</option>
+          <option value="--ar 21:9">21:9 ultrawide</option>
+        </select>
+      </div>
+
+      <div class="mb-6">
+        <p class="section-label">EXTRA DETAILS (optional)</p>
+        <input type="text" id="img-extra" placeholder="worn leather, muted earth tones, inspired by Gregory Crewdson...">
+      </div>
+
+      <button id="gen-img-btn" onclick="generateImagePrompt()" class="w-full py-6 metallic-btn font-black text-xl mb-4">GENERATE IMAGE PROMPT</button>
+      <pre id="img-out" class="hidden bg-black p-6 rounded-3xl mt-2 whitespace-pre-wrap text-sm overflow-x-auto font-mono"></pre>
+      <div id="img-actions" class="hidden mt-3 flex gap-3">
+        <button onclick="copyEl('img-out')" class="flex-1 py-3 border border-gray-500 text-gray-300 rounded-2xl font-bold">COPY</button>
+        <button onclick="saveElToHistory('img-out','Image Prompt')" class="flex-1 py-3 border border-gray-500 text-gray-300 rounded-2xl font-bold">SAVE</button>
+        <button onclick="speakEl('img-out')" class="flex-1 py-3 border border-cyan-700 text-cyan-400 rounded-2xl font-bold">🔊 SPEAK</button>
+      </div>
+    </div>
+
+    <!-- ████████████████████  VIDEO PROMPT BUILDER  ████████████████████ -->
+    <div id="video" class="hidden pt-20 max-w-md mx-auto px-6">
+      <h2 class="text-3xl font-black chrome script-font mb-2 text-center">VIDEO PROMPTS</h2>
+      <p class="text-gray-400 text-sm text-center mb-8">Optimized for Sora, Runway, Kling, Pika &amp; more</p>
+
+      <div class="mb-5">
+        <p class="section-label">SCENE / ACTION</p>
+        <textarea id="vid-scene" rows="3" placeholder="A woman in a red coat walks slowly through an empty city street at dawn, breath visible in cold air, footsteps echoing..."></textarea>
+      </div>
+
+      <div class="mb-5">
+        <p class="section-label">CAMERA MOVEMENT</p>
+        <div class="flex flex-wrap gap-2">
+          <button class="chip-btn" data-group="vid-cam" data-val="slow dolly forward">dolly in</button>
+          <button class="chip-btn" data-group="vid-cam" data-val="slow dolly backward">dolly out</button>
+          <button class="chip-btn" data-group="vid-cam" data-val="smooth pan left to right">pan</button>
+          <button class="chip-btn" data-group="vid-cam" data-val="vertical tilt up">tilt up</button>
+          <button class="chip-btn" data-group="vid-cam" data-val="aerial crane descending">crane down</button>
+          <button class="chip-btn" data-group="vid-cam" data-val="handheld shaky">handheld</button>
+          <button class="chip-btn" data-group="vid-cam" data-val="360 orbit around subject">orbit</button>
+          <button class="chip-btn" data-group="vid-cam" data-val="static locked off tripod">static</button>
+          <button class="chip-btn" data-group="vid-cam" data-val="whip pan">whip pan</button>
+        </div>
+      </div>
+
+      <div class="mb-5">
+        <p class="section-label">VISUAL STYLE</p>
+        <div class="flex flex-wrap gap-2">
+          <button class="chip-btn" data-group="vid-style" data-val="35mm film grain cinematic">35mm film</button>
+          <button class="chip-btn" data-group="vid-style" data-val="hyper-realistic">hyper-real</button>
+          <button class="chip-btn" data-group="vid-style" data-val="vintage VHS footage">VHS vintage</button>
+          <button class="chip-btn" data-group="vid-style" data-val="documentary handheld">documentary</button>
+          <button class="chip-btn" data-group="vid-style" data-val="Pixar 3D animation">Pixar animation</button>
+          <button class="chip-btn" data-group="vid-style" data-val="anime style">anime</button>
+          <button class="chip-btn" data-group="vid-style" data-val="black and white noir film">noir B&W</button>
+        </div>
+      </div>
+
+      <div class="mb-5">
+        <p class="section-label">PACING</p>
+        <div class="flex flex-wrap gap-2">
+          <button class="chip-btn" data-group="vid-pace" data-val="ultra slow and contemplative">ultra slow</button>
+          <button class="chip-btn" data-group="vid-pace" data-val="slow and deliberate">slow</button>
+          <button class="chip-btn" data-group="vid-pace" data-val="natural real-time pace">natural</button>
+          <button class="chip-btn" data-group="vid-pace" data-val="quick and energetic">quick</button>
+          <button class="chip-btn" data-group="vid-pace" data-val="frenetic rapid cuts">frenetic</button>
+        </div>
+      </div>
+
+      <div class="mb-5">
+        <p class="section-label">DURATION</p>
+        <div class="flex flex-wrap gap-2">
+          <button class="chip-btn" data-group="vid-dur" data-val="5 seconds">5s</button>
+          <button class="chip-btn" data-group="vid-dur" data-val="10 seconds">10s</button>
+          <button class="chip-btn" data-group="vid-dur" data-val="30 seconds">30s</button>
+          <button class="chip-btn" data-group="vid-dur" data-val="60 seconds">60s</button>
+        </div>
+      </div>
+
+      <div class="mb-5">
+        <p class="section-label">TARGET PLATFORM</p>
+        <select id="vid-target">
+          <option value="Sora">Sora (OpenAI)</option>
+          <option value="Runway Gen-4">Runway Gen-4</option>
+          <option value="Kling AI">Kling AI</option>
+          <option value="Pika">Pika</option>
+          <option value="Luma Dream Machine">Luma Dream Machine</option>
+          <option value="Hailuo / MiniMax">Hailuo / MiniMax</option>
+        </select>
+      </div>
+
+      <div class="mb-5">
+        <p class="section-label">AUDIO NOTES (optional)</p>
+        <input type="text" id="vid-audio" placeholder="ambient city sounds, distant piano, no dialogue...">
+      </div>
+
+      <div class="mb-6">
+        <p class="section-label">AVOID / NEGATIVE (optional)</p>
+        <input type="text" id="vid-neg" placeholder="no text overlays, no jump cuts, avoid camera shake...">
+      </div>
+
+      <button id="gen-vid-btn" onclick="generateVideoPrompt()" class="w-full py-6 metallic-btn font-black text-xl mb-4">GENERATE VIDEO PROMPT</button>
+      <pre id="vid-out" class="hidden bg-black p-6 rounded-3xl mt-2 whitespace-pre-wrap text-sm overflow-x-auto font-mono"></pre>
+      <div id="vid-actions" class="hidden mt-3 flex gap-3">
+        <button onclick="copyEl('vid-out')" class="flex-1 py-3 border border-gray-500 text-gray-300 rounded-2xl font-bold">COPY</button>
+        <button onclick="saveElToHistory('vid-out','Video Prompt')" class="flex-1 py-3 border border-gray-500 text-gray-300 rounded-2xl font-bold">SAVE</button>
+        <button onclick="speakEl('vid-out')" class="flex-1 py-3 border border-cyan-700 text-cyan-400 rounded-2xl font-bold">🔊 SPEAK</button>
+      </div>
+    </div>
+
+    <!-- ████████████████████  NARRATIVE GENERATOR  ████████████████████ -->
+    <div id="narrative" class="hidden pt-20 max-w-md mx-auto px-6">
+      <h2 class="text-3xl font-black chrome script-font mb-2 text-center">NARRATIVE</h2>
+      <p class="text-gray-400 text-sm text-center mb-8">Story-driven scripts, storyboards &amp; voiceover</p>
+
+      <div class="mb-5">
+        <p class="section-label">STORY CONCEPT</p>
+        <textarea id="narr-concept" rows="3" placeholder="A former lighthouse keeper discovers a message in a bottle addressed to her from 30 years ago..."></textarea>
+      </div>
+
+      <div class="mb-5">
+        <p class="section-label">GENRE</p>
+        <div class="flex flex-wrap gap-2">
+          <button class="chip-btn" data-group="narr-genre" data-val="drama">drama</button>
+          <button class="chip-btn" data-group="narr-genre" data-val="thriller">thriller</button>
+          <button class="chip-btn" data-group="narr-genre" data-val="sci-fi">sci-fi</button>
+          <button class="chip-btn" data-group="narr-genre" data-val="horror">horror</button>
+          <button class="chip-btn" data-group="narr-genre" data-val="romance">romance</button>
+          <button class="chip-btn" data-group="narr-genre" data-val="mystery">mystery</button>
+          <button class="chip-btn" data-group="narr-genre" data-val="fantasy">fantasy</button>
+          <button class="chip-btn" data-group="narr-genre" data-val="action">action</button>
+        </div>
+      </div>
+
+      <div class="mb-5">
+        <p class="section-label">OUTPUT FORMAT</p>
+        <div class="flex flex-wrap gap-2">
+          <button class="chip-btn" data-group="narr-format" data-val="shot-by-shot storyboard with image prompts for each scene">storyboard</button>
+          <button class="chip-btn" data-group="narr-format" data-val="numbered scene descriptions optimized for video AI generation">video scenes</button>
+          <button class="chip-btn" data-group="narr-format" data-val="voiceover narration script written for text-to-speech">voiceover</button>
+          <button class="chip-btn" data-group="narr-format" data-val="complete short story prose">short story</button>
+        </div>
+      </div>
+
+      <div class="mb-5">
+        <p class="section-label">TONE</p>
+        <div class="flex flex-wrap gap-2">
+          <button class="chip-btn" data-group="narr-tone" data-val="poetic and literary">poetic</button>
+          <button class="chip-btn" data-group="narr-tone" data-val="spare and minimalist">minimalist</button>
+          <button class="chip-btn" data-group="narr-tone" data-val="visceral and raw">raw</button>
+          <button class="chip-btn" data-group="narr-tone" data-val="warm and hopeful">hopeful</button>
+          <button class="chip-btn" data-group="narr-tone" data-val="dark and brooding">dark</button>
+          <button class="chip-btn" data-group="narr-tone" data-val="playful and witty">playful</button>
+        </div>
+      </div>
+
+      <div class="mb-5">
+        <p class="section-label">LENGTH</p>
+        <div class="flex flex-wrap gap-2">
+          <button class="chip-btn" data-group="narr-len" data-val="brief (200–300 words)">short</button>
+          <button class="chip-btn" data-group="narr-len" data-val="medium (500–700 words)">medium</button>
+          <button class="chip-btn" data-group="narr-len" data-val="long (1000+ words)">long</button>
+        </div>
+      </div>
+
+      <div class="mb-6">
+        <p class="section-label">SCENE BEATS <span style="font-size:0.65rem;color:#555;font-weight:400;text-transform:none">(optional — add story beats or leave blank)</span></p>
+        <div id="scene-list"></div>
+        <button onclick="addScene()" class="w-full py-3 border border-dashed border-gray-600 text-gray-500 rounded-2xl text-sm font-bold hover:border-cyan-700 hover:text-cyan-600 transition-colors">+ ADD SCENE BEAT</button>
+      </div>
+
+      <button id="gen-narr-btn" onclick="generateNarrative()" class="w-full py-6 metallic-btn font-black text-xl mb-4">GENERATE NARRATIVE</button>
+      <pre id="narr-out" class="hidden bg-black p-6 rounded-3xl mt-2 whitespace-pre-wrap text-sm overflow-x-auto font-mono"></pre>
+      <div id="narr-actions" class="hidden mt-3 flex gap-3">
+        <button onclick="copyEl('narr-out')" class="flex-1 py-3 border border-gray-500 text-gray-300 rounded-2xl font-bold">COPY</button>
+        <button onclick="saveElToHistory('narr-out','Narrative')" class="flex-1 py-3 border border-gray-500 text-gray-300 rounded-2xl font-bold">SAVE</button>
+        <button onclick="speakEl('narr-out')" class="flex-1 py-3 border border-cyan-700 text-cyan-400 rounded-2xl font-bold">🔊 SPEAK</button>
+      </div>
+    </div>
+
+    <!-- ████████████████████  TEXT TO SPEECH  ████████████████████ -->
+    <div id="tts" class="hidden pt-20 max-w-md mx-auto px-6">
+      <h2 class="text-3xl font-black chrome script-font mb-2 text-center">TEXT-TO-SPEECH</h2>
+      <p class="text-gray-400 text-sm text-center mb-8">Browser-native TTS — no API needed, no limits</p>
+
+      <div class="mb-5">
+        <p class="section-label">TEXT TO SPEAK</p>
+        <textarea id="tts-text" rows="8" placeholder="Paste any text here — your generated narrative, a script, a prompt — and it will be read aloud.&#10;&#10;Tip: Generate a Narrative above, then come back here and paste it."></textarea>
+      </div>
+
+      <div class="mb-5">
+        <p class="section-label">VOICE</p>
+        <select id="tts-voice-select" style="border-radius:1rem !important"></select>
+      </div>
+
+      <div class="mb-5">
+        <p class="section-label">SPEED — <span id="tts-rate-val" style="color:#0ff">0.90</span></p>
+        <input type="range" id="tts-rate" min="0.5" max="2" step="0.05" value="0.9" class="w-full">
+      </div>
+      <div class="mb-5">
+        <p class="section-label">PITCH — <span id="tts-pitch-val" style="color:#0ff">1.00</span></p>
+        <input type="range" id="tts-pitch" min="0.5" max="2" step="0.05" value="1.0" class="w-full">
+      </div>
+      <div class="mb-6">
+        <p class="section-label">VOLUME — <span id="tts-vol-val" style="color:#0ff">1.00</span></p>
+        <input type="range" id="tts-vol" min="0" max="1" step="0.05" value="1.0" class="w-full">
+      </div>
+
+      <div class="flex gap-3 mb-4">
+        <button onclick="startTTS()" class="flex-1 py-5 metallic-btn font-black text-lg">▶ SPEAK</button>
+        <button onclick="stopTTS()" class="px-8 py-5 border border-gray-500 text-gray-300 rounded-2xl font-bold">■ STOP</button>
+      </div>
+      <p id="tts-status" class="text-center text-sm text-gray-500 mb-8 min-h-5"></p>
+
+      <hr class="border-gray-800 mb-8">
+
+      <p class="text-white font-bold mb-3">OR — Generate Text with AI &amp; Auto-Speak</p>
+      <div class="mb-4">
+        <p class="section-label">WHAT TO WRITE</p>
+        <textarea id="tts-ai-prompt" rows="3" placeholder="Write a 60-second dramatic opening monologue for a noir film narrator standing on a rooftop at 3am..."></textarea>
+      </div>
+      <button id="gen-tts-btn" onclick="generateAndSpeak()" class="w-full py-6 metallic-btn font-black text-xl">WRITE &amp; SPEAK</button>
+    </div>
+
+    <!-- BEGINNER (original, untouched) -->
+    <div id="beginner" class="hidden pt-20 max-w-md mx-auto px-6">
+      <h2 class="text-3xl font-black chrome script-font mb-8 text-center">BEGINNER BUILDER</h2>
+      <div class="space-y-6">
+        <div><label class="text-white block mb-1 text-xs uppercase">META</label><textarea id="b-meta" rows="3" class="w-full" placeholder="MODE: IMAGE&#10;TONE: ULTRA-REALISTIC"></textarea></div>
+        <div><label class="text-white block mb-1 text-xs uppercase">SUBJECT</label><textarea id="b-subject" rows="3" class="w-full" placeholder="TYPE: HUMAN&#10;DETAILS: bald head..."></textarea></div>
+        <div><label class="text-white block mb-1 text-xs uppercase">CAMERA</label><textarea id="b-camera" rows="3" class="w-full" placeholder="MOVE: slow dolly-in"></textarea></div>
+        <div><label class="text-white block mb-1 text-xs uppercase">LIGHTING</label><textarea id="b-lighting" rows="3" class="w-full" placeholder="TYPE: industrial"></textarea></div>
+        <div><label class="text-white block mb-1 text-xs uppercase">ENVIRONMENT</label><textarea id="b-env" rows="3" class="w-full" placeholder="LOCATION: rain-slicked alley"></textarea></div>
+        <div><label class="text-white block mb-1 text-xs uppercase">MOTION</label><textarea id="b-motion" rows="3" class="w-full" placeholder="ACTION: subtle wind blowing"></textarea></div>
+        <div><label class="text-white block mb-1 text-xs uppercase">ATMOSPHERE</label><textarea id="b-atmo" rows="3" class="w-full" placeholder="MOOD: tense and mysterious"></textarea></div>
+        <div><label class="text-white block mb-1 text-xs uppercase">STYLE</label><textarea id="b-style" rows="3" class="w-full" placeholder="ART: cyberpunk"></textarea></div>
+      </div>
+      <button onclick="executeBeginner()" class="mt-10 w-full py-6 metallic-btn font-black text-xl rounded-3xl">EXECUTE BARBANZO SCRIPT</button>
+      <pre id="beginner-out" class="hidden bg-black p-6 rounded-3xl mt-6 whitespace-pre-wrap text-sm overflow-x-auto"></pre>
+      <button id="enhance-btn-b" onclick="enhanceWithGroq('beginner')" class="hidden mt-4 w-full py-4 metallic-btn font-bold rounded-2xl">ENHANCE WITH GROQ</button>
+      <button onclick="copyOutput('beginner-out')" class="mt-4 w-full py-4 border border-gray-500 text-gray-300 rounded-2xl font-bold">COPY OUTPUT</button>
+      <button onclick="saveToHistory('beginner-out')" class="mt-4 w-full py-4 border border-gray-500 text-gray-300 rounded-2xl font-bold">SAVE TO HISTORY</button>
+    </div>
+
+    <!-- EXPERT (original, untouched) -->
+    <div id="expert" class="hidden pt-20 max-w-md mx-auto px-6">
+      <h2 class="text-3xl font-black chrome script-font mb-8 text-center">EXPERT EDITOR</h2>
+      <textarea id="expert-text" rows="20" class="w-full" placeholder="BARBANZO SCRIPT:&#10;&#10;META:&#10;...&#10;&#10;END:"></textarea>
+      <button onclick="executeExpert()" class="mt-10 w-full py-6 metallic-btn font-black text-xl rounded-3xl">EXECUTE BARBANZO SCRIPT</button>
+      <pre id="expert-out" class="hidden bg-black p-6 rounded-3xl mt-6 whitespace-pre-wrap text-sm overflow-x-auto"></pre>
+      <button id="enhance-btn-e" onclick="enhanceWithGroq('expert')" class="hidden mt-4 w-full py-4 metallic-btn font-bold rounded-2xl">ENHANCE WITH GROQ</button>
+      <button onclick="copyOutput('expert-out')" class="mt-4 w-full py-4 border border-gray-500 text-gray-300 rounded-2xl font-bold">COPY OUTPUT</button>
+      <button onclick="saveToHistory('expert-out')" class="mt-4 w-full py-4 border border-gray-500 text-gray-300 rounded-2xl font-bold">SAVE TO HISTORY</button>
+    </div>
+
+    <!-- HISTORY PAGE (original + new items) -->
+    <div id="history" class="hidden pt-20 max-w-md mx-auto px-6">
+      <h2 class="text-3xl font-black chrome script-font mb-8 text-center">HISTORY</h2>
+      <div id="full-history-list" class="space-y-4"></div>
+      <button onclick="clearHistory()" class="mt-8 w-full py-4 border border-red-500 text-red-300 rounded-2xl font-bold">CLEAR HISTORY</button>
+    </div>
+
+    <!-- PROFILE / CERTS (original, untouched) -->
+    <div id="profile" class="hidden pt-20 max-w-md mx-auto px-6">
+      <h2 class="text-3xl font-black chrome script-font mb-8 text-center">CERTIFICATIONS</h2>
+      <div id="cert-list" class="space-y-4 mb-8"></div>
+      <button onclick="issueCert()" class="w-full py-4 metallic-btn font-bold">ISSUE NEW CERT</button>
+    </div>
+
+    <!-- SETTINGS (original + API key section added at top) -->
+    <div id="settings" class="hidden pt-20 max-w-md mx-auto px-6">
+      <h2 class="text-3xl font-black chrome script-font mb-8 text-center">SETTINGS</h2>
+
+      <!-- NEW: Anthropic API Key -->
+      <div class="bg-zinc-950 border border-cyan-900 p-6 rounded-3xl mb-4">
+        <p class="text-cyan-400 text-xs uppercase font-bold mb-1">ANTHROPIC API KEY</p>
+        <p class="text-gray-400 text-xs mb-3">Powers Image, Video, Narrative &amp; TTS generators. Free tier available at console.anthropic.com</p>
+        <input id="anthropic-key-input" type="password" class="w-full mb-3" placeholder="sk-ant-...">
+        <div class="flex gap-3">
+          <button onclick="saveAnthropicKey()" class="flex-1 py-3 metallic-btn font-bold rounded-2xl">SAVE KEY</button>
+          <button onclick="clearAnthropicKey()" class="px-5 py-3 border border-red-800 text-red-400 rounded-2xl font-bold text-sm">CLEAR</button>
+        </div>
+        <p id="anthropic-key-status" class="text-xs mt-2 text-center"></p>
+      </div>
+
+      <!-- Original Groq section -->
+      <div class="bg-zinc-950 border border-gray-700 p-6 rounded-3xl mb-4">
+        <p class="text-gray-400 text-xs uppercase mb-3">GROQ API KEY (free at groq.com)</p>
+        <input id="groq-key" type="password" class="w-full" placeholder="gsk_...">
+        <button onclick="saveKey()" class="mt-4 w-full py-3 metallic-btn font-bold rounded-2xl">SAVE GROQ KEY</button>
+      </div>
+      <div class="bg-zinc-950 border border-gray-700 p-6 rounded-3xl mb-4">
+        <p class="text-gray-400 text-xs uppercase mb-3">GROQ MODEL</p>
+        <select id="groq-model" style="border-radius:1rem !important">
+          <option value="llama-3.3-70b-versatile">Llama 3.3 70B Versatile</option>
+          <option value="llama3-70b-8192">Llama 3 70B</option>
+          <option value="mixtral-8x7b-32768">Mixtral 8x7B</option>
+          <option value="gemma-7b-it">Gemma 7B IT</option>
+          <option value="llama3-8b-8192">Llama 3 8B</option>
+        </select>
+      </div>
+      <div class="bg-zinc-950 border border-gray-700 p-6 rounded-3xl mb-4">
+        <p class="text-gray-400 text-xs uppercase mb-3">TEMPERATURE (0.0 - 1.0)</p>
+        <input type="range" id="groq-temp" min="0" max="1" step="0.1" value="0.7" class="w-full">
+        <p class="text-center text-sm mt-2" id="temp-value">0.7</p>
+      </div>
+      <div class="bg-zinc-950 border border-gray-700 p-6 rounded-3xl mb-4">
+        <p class="text-gray-400 text-xs uppercase mb-3">MAX TOKENS</p>
+        <input id="groq-max-tokens" type="number" class="w-full" value="900" min="100" max="4096">
+      </div>
+      <div class="bg-zinc-950 border border-gray-700 p-6 rounded-3xl mb-4">
+        <label class="flex items-center text-gray-400 text-xs uppercase">
+          <input id="groq-stream" type="checkbox" style="border-radius:4px !important;min-height:unset;padding:0;width:18px;height:18px" class="mr-2">
+          ENABLE STREAMING RESPONSES
+        </label>
+      </div>
+      <div class="bg-zinc-950 border border-gray-700 p-6 rounded-3xl mb-4">
+        <p class="text-gray-400 text-xs uppercase mb-3">CUSTOM SYSTEM PROMPT</p>
+        <textarea id="groq-system-prompt" rows="4" class="w-full">You are the BARBANZO EXECUTOR by Michael Sanzo. Obey the exact 9-module structure. Never add, suggest or change anything the author wrote. Expand ONLY into highest quality cinematic prompt.</textarea>
+      </div>
+      <button onclick="saveGroqSettings()" class="w-full py-4 metallic-btn font-bold mb-4">SAVE GROQ SETTINGS</button>
+      <button onclick="showHelp()" class="w-full py-4 metallic-btn font-bold">VIEW HELP</button>
+    </div>
+
+    <!-- HELP MODAL (original) -->
+    <div id="help-modal" class="hidden fixed inset-0 flex items-center justify-center z-50 bg-black/80">
+      <div class="bg-zinc-950 border border-gray-700 rounded-3xl p-8 text-sm max-h-[80vh] overflow-y-auto max-w-sm mx-4">
+        <h3 class="chrome script-font text-2xl font-black mb-6">BROTHER'S EXACT RULES</h3>
+        <p class="mb-6">"The author is king. The system obeys. No suggestions. No overrides."</p>
+        <p class="mb-4">Order is sacred: META → SUBJECT → CAMERA → LIGHTING → ENVIRONMENT → MOTION → ATMOSPHERE → STYLE → END</p>
+        <button onclick="hideHelp()" class="mt-8 w-full py-4 border border-gray-500 text-gray-300 rounded-2xl font-bold">CLOSE</button>
+      </div>
+    </div>
+
+    <!-- OUTPUT MODAL (original + reused for new tools) -->
+    <div id="output-modal" class="hidden fixed inset-0 flex items-center justify-center z-50 bg-black/80">
+      <div id="output-content" class="p-8 rounded-3xl max-w-md w-full mx-4">
+        <p id="modal-label" class="text-gray-400 text-xs uppercase mb-3"></p>
+        <pre id="modal-output" class="whitespace-pre-wrap text-sm overflow-x-auto font-mono"></pre>
+        <div class="flex gap-3 mt-4">
+          <button onclick="copyModalOutput()" class="flex-1 py-4 border border-gray-500 text-gray-300 rounded-2xl font-bold">COPY</button>
+          <button onclick="hideOutputModal()" class="flex-1 py-4 border border-gray-500 text-gray-300 rounded-2xl font-bold">CLOSE</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- BOTTOM NAV -->
+    <footer class="fixed bottom-0 left-0 right-0 h-16 flex justify-around items-center z-50 matte">
+      <button onclick="navTo('home')" class="nav-btn"><i class="fa-solid fa-home text-2xl"></i><span>Home</span></button>
+      <button onclick="navTo('image')" class="nav-btn"><i class="fa-solid fa-image text-2xl"></i><span>Image</span></button>
+      <button onclick="navTo('video')" class="nav-btn"><i class="fa-solid fa-film text-2xl"></i><span>Video</span></button>
+      <button onclick="navTo('narrative')" class="nav-btn"><i class="fa-solid fa-book text-2xl"></i><span>Story</span></button>
+      <button onclick="navTo('tts')" class="nav-btn"><i class="fa-solid fa-microphone text-2xl"></i><span>TTS</span></button>
+      <button onclick="navTo('settings')" class="nav-btn"><i class="fa-solid fa-gear text-2xl"></i><span>Settings</span></button>
+    </footer>
+  </div>
+
+<script>
+  // ─── STATE ────────────────────────────────────────────────────────────────────
+  let groqKey = localStorage.getItem('groqKey') || '';
+  let groqModel = localStorage.getItem('groqModel') || 'llama-3.3-70b-versatile';
+  let groqTemp = parseFloat(localStorage.getItem('groqTemp') || 0.7);
+  let groqMaxTokens = parseInt(localStorage.getItem('groqMaxTokens') || 900);
+  let groqStream = localStorage.getItem('groqStream') === 'true';
+  let groqSystemPrompt = localStorage.getItem('groqSystemPrompt') || "You are the BARBANZO EXECUTOR by Michael Sanzo. Obey the exact 9-module structure. Never add, suggest or change anything the author wrote. Expand ONLY into highest quality cinematic prompt.";
+  let anthropicKey = localStorage.getItem('anthropic_key') || '';
+  let certs = JSON.parse(localStorage.getItem('barbanzoCerts') || '[]');
+  let history = JSON.parse(localStorage.getItem('barbanzoHistory') || '[]');
+  let currentPage = 'home';
+  let selectedPreset = '';
+  let sceneCount = 0;
+  let ttsUtterance = null;
+
+  // ─── INIT ─────────────────────────────────────────────────────────────────────
+  function enterAcademy() {
+    document.getElementById('splash').style.display = 'none';
+    document.getElementById('app').classList.remove('hidden');
+    navTo('home');
+    renderCerts();
+    renderHistory();
+    loadGroqSettings();
+    populateTTSVoices();
+    if (window.speechSynthesis) window.speechSynthesis.onvoiceschanged = populateTTSVoices;
+    setupRangeLabels();
+    setupChipGroups();
+    updateAnthropicKeyStatus();
+  }
+
+  // ─── NAVIGATION ───────────────────────────────────────────────────────────────
+  function navTo(page) {
+    document.querySelectorAll('#app > div[id]').forEach(d => d.classList.add('hidden'));
+    const el = document.getElementById(page);
+    if (el) el.classList.remove('hidden');
+    currentPage = page;
+    window.scrollTo(0, 0);
+    document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('nav-btn-active'));
+    const activeBtn = document.querySelector(`button[onclick="navTo('${page}')"]`);
+    if (activeBtn) activeBtn.classList.add('nav-btn-active');
+    if (page === 'settings') { loadGroqSettings(); updateAnthropicKeyStatus(); }
+    if (page === 'history') renderFullHistory();
+    if (page === 'home') renderHistory();
+  }
+
+  // ─── ANTHROPIC KEY ────────────────────────────────────────────────────────────
+  function saveAnthropicKey() {
+    const val = document.getElementById('anthropic-key-input').value.trim();
+    if (!val) { alert('Paste your Anthropic API key first'); return; }
+    if (!val.startsWith('sk-ant-')) { alert('Key should start with sk-ant-'); return; }
+    anthropicKey = val;
+    localStorage.setItem('anthropic_key', anthropicKey);
+    document.getElementById('anthropic-key-input').value = '••••••••••••••••';
+    updateAnthropicKeyStatus();
+    alert('Anthropic key saved — Image, Video, Narrative & TTS generators are unlocked');
+  }
+
+  function clearAnthropicKey() {
+    if (!confirm('Clear Anthropic key?')) return;
+    anthropicKey = '';
+    localStorage.removeItem('anthropic_key');
+    document.getElementById('anthropic-key-input').value = '';
+    updateAnthropicKeyStatus();
+  }
+
+  function updateAnthropicKeyStatus() {
+    const el = document.getElementById('anthropic-key-status');
+    if (!el) return;
+    el.textContent = anthropicKey ? '✓ Key active — AI features enabled' : 'No key saved — AI features disabled';
+    el.style.color = anthropicKey ? '#0ff' : '#666';
+  }
+
+  // ─── CLAUDE API (streaming) ───────────────────────────────────────────────────
+  async function callClaude(systemPrompt, userMessage, outputEl, btnId) {
+    if (!anthropicKey) {
+      navTo('settings');
+      alert('Add your Anthropic API key in Settings first — it\'s free at console.anthropic.com');
+      return null;
+    }
+
+    const btn = document.getElementById(btnId);
+    const origText = btn ? btn.innerHTML : '';
+    if (btn) { btn.disabled = true; btn.innerHTML = '<span class="spin"></span>GENERATING...'; }
+
+    outputEl.textContent = '';
+    outputEl.classList.remove('hidden');
+    const cursor = document.createElement('span');
+    cursor.className = 'stream-cursor';
+    outputEl.appendChild(cursor);
+
+    try {
+      const resp = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': anthropicKey,
+          'anthropic-version': '2023-06-01',
+          'anthropic-dangerous-direct-browser-access': 'true'
+        },
+        body: JSON.stringify({
+          model: 'claude-sonnet-4-20250514',
+          max_tokens: 1024,
+          stream: true,
+          system: systemPrompt,
+          messages: [{ role: 'user', content: userMessage }]
+        })
+      });
+
+      if (!resp.ok) {
+        const err = await resp.json().catch(() => ({}));
+        outputEl.textContent = 'Error: ' + (err.error?.message || 'HTTP ' + resp.status);
+        if (btn) { btn.disabled = false; btn.innerHTML = origText; }
+        return null;
+      }
+
+      const reader = resp.body.getReader();
+      const decoder = new TextDecoder();
+      let full = '';
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        const lines = decoder.decode(value).split('\n');
+        for (const line of lines) {
+          if (!line.startsWith('data: ')) continue;
+          const d = line.slice(6).trim();
+          if (d === '[DONE]' || !d) continue;
+          try {
+            const p = JSON.parse(d);
+            if (p.type === 'content_block_delta' && p.delta?.text) {
+              full += p.delta.text;
+              outputEl.textContent = full;
+              outputEl.appendChild(cursor);
+            }
+          } catch {}
+        }
+      }
+
+      cursor.remove();
+      outputEl.textContent = full;
+      if (btn) { btn.disabled = false; btn.innerHTML = origText; }
+      return full;
+
+    } catch (e) {
+      outputEl.textContent = 'Error: ' + e.message;
+      if (btn) { btn.disabled = false; btn.innerHTML = origText; }
+      return null;
+    }
+  }
+
+  // ─── CHIP GROUPS ─────────────────────────────────────────────────────────────
+  function setupChipGroups() {
+    document.querySelectorAll('.chip-btn').forEach(chip => {
+      chip.addEventListener('click', () => chip.classList.toggle('chip-active'));
+    });
+  }
+
+  function getChips(group) {
+    return Array.from(document.querySelectorAll(`.chip-btn[data-group="${group}"].chip-active`))
+      .map(c => c.dataset.val);
+  }
+
+  // ─── IMAGE PROMPT ─────────────────────────────────────────────────────────────
+  async function generateImagePrompt() {
+    const subject = document.getElementById('img-subject').value.trim();
+    if (!subject) { alert('Describe your scene first'); return; }
+
+    const style = getChips('img-style');
+    const mood = getChips('img-mood');
+    const light = getChips('img-light');
+    const cam = getChips('img-cam');
+    const target = document.getElementById('img-target').value;
+    const ar = document.getElementById('img-ar').value;
+    const extra = document.getElementById('img-extra').value.trim();
+
+    const out = document.getElementById('img-out');
+    const actions = document.getElementById('img-actions');
+    actions.classList.add('hidden');
+
+    const system = `You are an expert AI image prompt engineer. Write precise, vivid, optimized prompts for ${target}.
+Output ONLY the raw prompt text itself — no preamble, no explanation, no labels, no markdown.
+Just the prompt, ready to paste directly into ${target}.`;
+
+    const user = `Write an optimized ${target} image prompt for:
+
+SCENE: ${subject}
+${style.length ? 'STYLE: ' + style.join(', ') : ''}
+${mood.length ? 'MOOD: ' + mood.join(', ') : ''}
+${light.length ? 'LIGHTING: ' + light.join(', ') : ''}
+${cam.length ? 'CAMERA: ' + cam.join(', ') : ''}
+${extra ? 'EXTRA DETAILS: ' + extra : ''}
+ASPECT RATIO PARAMETER: ${ar}
+
+For Midjourney: append the --ar parameter at the very end. For other tools, integrate naturally.`;
+
+    const result = await callClaude(system, user, out, 'gen-img-btn');
+    if (result) {
+      actions.classList.remove('hidden');
+      addToHistory('Image Prompt', target, result);
+    }
+  }
+
+  // ─── VIDEO PROMPT ─────────────────────────────────────────────────────────────
+  async function generateVideoPrompt() {
+    const scene = document.getElementById('vid-scene').value.trim();
+    if (!scene) { alert('Describe your video scene first'); return; }
+
+    const cam = getChips('vid-cam');
+    const vstyle = getChips('vid-style');
+    const pace = getChips('vid-pace');
+    const dur = getChips('vid-dur');
+    const target = document.getElementById('vid-target').value;
+    const audio = document.getElementById('vid-audio').value.trim();
+    const neg = document.getElementById('vid-neg').value.trim();
+
+    const out = document.getElementById('vid-out');
+    const actions = document.getElementById('vid-actions');
+    actions.classList.add('hidden');
+
+    const system = `You are an expert AI video prompt engineer specializing in ${target}.
+Write detailed, precise video prompts that produce professional cinematic results.
+Output ONLY the raw prompt text — no explanation, no preamble, no markdown, no labels.
+Just the prompt, ready to paste directly into ${target}.`;
+
+    const user = `Write an optimized ${target} video prompt for:
+
+SCENE: ${scene}
+${cam.length ? 'CAMERA MOVEMENT: ' + cam.join(', ') : ''}
+${vstyle.length ? 'VISUAL STYLE: ' + vstyle.join(', ') : ''}
+${pace.length ? 'PACING: ' + pace.join(', ') : ''}
+${dur.length ? 'DURATION: ' + dur.join(', ') : ''}
+${audio ? 'AUDIO: ' + audio : ''}
+${neg ? 'NEGATIVE/AVOID: ' + neg : ''}
+
+Be specific about motion, timing, mood, and visual quality. Single cohesive prompt.`;
+
+    const result = await callClaude(system, user, out, 'gen-vid-btn');
+    if (result) {
+      actions.classList.remove('hidden');
+      addToHistory('Video Prompt', target, result);
+    }
+  }
+
+  // ─── NARRATIVE ────────────────────────────────────────────────────────────────
+  async function generateNarrative() {
+    const concept = document.getElementById('narr-concept').value.trim();
+    if (!concept) { alert('Enter a story concept first'); return; }
+
+    const genre = getChips('narr-genre');
+    const format = getChips('narr-format');
+    const tone = getChips('narr-tone');
+    const len = getChips('narr-len');
+
+    const beats = Array.from(document.querySelectorAll('.scene-beat-input'))
+      .map(t => t.value.trim()).filter(Boolean);
+
+    const out = document.getElementById('narr-out');
+    const actions = document.getElementById('narr-actions');
+    actions.classList.add('hidden');
+
+    const chosenFormat = format[0] || 'voiceover narration script written for text-to-speech';
+    const chosenTone = tone[0] || 'cinematic and atmospheric';
+    const chosenLen = len[0] || 'medium (500–700 words)';
+
+    const system = `You are a master storyteller and narrative director. Write compelling ${chosenTone} stories.
+Output ONLY the story/script itself — no preamble, no "here is your story", no meta commentary.
+Just the content, formatted cleanly.`;
+
+    const user = `Write a ${chosenFormat}:
+
+CONCEPT: ${concept}
+${genre.length ? 'GENRE: ' + genre.join(', ') : ''}
+TONE: ${chosenTone}
+LENGTH: ${chosenLen}
+${beats.length ? 'STORY BEATS:\n' + beats.map((b, i) => `${i + 1}. ${b}`).join('\n') : ''}
+
+${chosenFormat.includes('storyboard') ? 'Format: SHOT N | Visual description | Image prompt ready for Midjourney' : ''}
+${chosenFormat.includes('video') ? 'Format: SCENE N | Visual description | Camera direction | Mood/atmosphere' : ''}
+${chosenFormat.includes('voiceover') ? 'Write as natural spoken narration, first or third person, easy to read aloud' : ''}`;
+
+    const result = await callClaude(system, user, out, 'gen-narr-btn');
+    if (result) {
+      actions.classList.remove('hidden');
+      addToHistory('Narrative', genre.join('/') || 'story', result);
+    }
+  }
+
+  // ─── TTS ──────────────────────────────────────────────────────────────────────
+  function populateTTSVoices() {
+    const sel = document.getElementById('tts-voice-select');
+    if (!sel || !window.speechSynthesis) return;
+    const voices = speechSynthesis.getVoices();
+    if (!voices.length) return;
+    sel.innerHTML = '';
+    const eng = voices.filter(v => v.lang.startsWith('en')).sort((a, b) => {
+      if (a.default) return -1; if (b.default) return 1;
+      return a.name.localeCompare(b.name);
+    });
+    const rest = voices.filter(v => !v.lang.startsWith('en'));
+    [...eng, ...rest].forEach(v => {
+      const o = document.createElement('option');
+      o.value = v.name;
+      o.textContent = `${v.name} (${v.lang})`;
+      sel.appendChild(o);
+    });
+  }
+
+  function setupRangeLabels() {
+    [['tts-rate','tts-rate-val'],['tts-pitch','tts-pitch-val'],['tts-vol','tts-vol-val']].forEach(([id, valId]) => {
+      const el = document.getElementById(id);
+      if (el) el.oninput = () => { document.getElementById(valId).textContent = parseFloat(el.value).toFixed(2); };
+    });
+    const gt = document.getElementById('groq-temp');
+    if (gt) gt.oninput = () => { document.getElementById('temp-value').textContent = gt.value; };
+  }
+
+  function startTTS() {
+    const text = document.getElementById('tts-text').value.trim();
+    if (!text) { alert('No text to speak'); return; }
+    if (!window.speechSynthesis) { alert('Text-to-speech is not supported in this browser'); return; }
+    stopTTS();
+    const voices = speechSynthesis.getVoices();
+    const selName = document.getElementById('tts-voice-select').value;
+    const voice = voices.find(v => v.name === selName) || null;
+
+    ttsUtterance = new SpeechSynthesisUtterance(text);
+    if (voice) ttsUtterance.voice = voice;
+    ttsUtterance.rate = parseFloat(document.getElementById('tts-rate').value);
+    ttsUtterance.pitch = parseFloat(document.getElementById('tts-pitch').value);
+    ttsUtterance.volume = parseFloat(document.getElementById('tts-vol').value);
+
+    const status = document.getElementById('tts-status');
+    ttsUtterance.onstart = () => { status.textContent = '▶ Speaking...'; status.style.color = '#0ff'; };
+    ttsUtterance.onend = () => { status.textContent = '✓ Done'; status.style.color = '#0f0'; setTimeout(() => { status.textContent = ''; }, 2500); };
+    ttsUtterance.onerror = (e) => { status.textContent = 'Error: ' + e.error; status.style.color = '#f55'; };
+
+    speechSynthesis.speak(ttsUtterance);
+  }
+
+  function stopTTS() {
+    if (window.speechSynthesis) speechSynthesis.cancel();
+    const status = document.getElementById('tts-status');
+    if (status) { status.textContent = ''; }
+  }
+
+  async function generateAndSpeak() {
+    const prompt = document.getElementById('tts-ai-prompt').value.trim();
+    if (!prompt) { alert('Describe what you want written'); return; }
+
+    const out = document.getElementById('tts-text');
+    out.value = '';
+
+    const system = 'Write compelling, natural-sounding spoken text. Output ONLY the text itself — no preamble, no quotation marks, no labels. Just the content ready to be read aloud.';
+
+    // Use a temp pre element for streaming, then put result in textarea
+    const tempPre = document.createElement('pre');
+    tempPre.style.display = 'none';
+    document.body.appendChild(tempPre);
+
+    const result = await callClaude(system, prompt, tempPre, 'gen-tts-btn');
+    document.body.removeChild(tempPre);
+
+    if (result) {
+      out.value = result;
+      addToHistory('TTS Text', 'generated', result);
+      setTimeout(startTTS, 400);
+    }
+  }
+
+  // Speak any output element text
+  function speakEl(elId) {
+    const text = document.getElementById(elId).textContent.trim();
+    if (!text) return;
+    document.getElementById('tts-text').value = text;
+    navTo('tts');
+    setTimeout(startTTS, 300);
+  }
+
+  // ─── OUTPUT HELPERS ───────────────────────────────────────────────────────────
+  function copyEl(elId) {
+    const text = document.getElementById(elId).textContent.trim();
+    navigator.clipboard.writeText(text).then(() => showToast('✓ Copied to clipboard')).catch(() => {
+      // Fallback
+      const ta = document.createElement('textarea');
+      ta.value = text; document.body.appendChild(ta); ta.select();
+      document.execCommand('copy'); document.body.removeChild(ta);
+      showToast('✓ Copied');
+    });
+  }
+
+  function saveElToHistory(elId, type) {
+    const text = document.getElementById(elId).textContent.trim();
+    const title = prompt('Title for this ' + type + ':');
+    if (title) {
+      addToHistory(type, title, text);
+      showToast('Saved to history');
+    }
+  }
+
+  function showToast(msg) {
+    let t = document.getElementById('toast-msg');
+    if (!t) {
+      t = document.createElement('div');
+      t.id = 'toast-msg';
+      t.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#0a2a2a;border:1px solid rgba(0,255,255,0.4);color:#0ff;padding:10px 24px;border-radius:999px;font-size:0.85rem;z-index:9999;transition:opacity 0.3s;font-family:monospace;';
+      document.body.appendChild(t);
+    }
+    t.textContent = msg;
+    t.style.opacity = '1';
+    clearTimeout(t._timer);
+    t._timer = setTimeout(() => { t.style.opacity = '0'; }, 2200);
+  }
+
+  // ─── SCENES (Narrative) ───────────────────────────────────────────────────────
+  function addScene() {
+    sceneCount++;
+    const list = document.getElementById('scene-list');
+    const row = document.createElement('div');
+    row.className = 'scene-row';
+    row.innerHTML = `
+      <div class="scene-num-badge">${sceneCount}</div>
+      <textarea class="scene-beat-input scene-textarea" rows="2" placeholder="Scene ${sceneCount} beat..."></textarea>
+      <button class="scene-del-btn" onclick="this.parentElement.remove()">✕</button>
+    `;
+    list.appendChild(row);
+  }
+
+  // ─── HISTORY ──────────────────────────────────────────────────────────────────
+  function addToHistory(type, subtitle, content) {
+    history.unshift({ type, subtitle, content, ts: Date.now() });
+    localStorage.setItem('barbanzoHistory', JSON.stringify(history));
+    if (currentPage === 'home') renderHistory();
+  }
+
+  function renderHistory() {
+    const list = document.getElementById('history-list');
+    if (!list) return;
+    if (!history.length) { list.innerHTML = '<p class="text-gray-600 text-xs">No history yet</p>'; return; }
+    list.innerHTML = history.slice(0, 5).map((item, i) => `
+      <div class="history-item">
+        <p class="text-xs text-cyan-700 uppercase font-bold mb-1">${item.type || 'Script'}</p>
+        <p class="text-white font-bold">${item.subtitle || item.title || ''}</p>
+        <p class="text-gray-500 text-xs mt-1">${(item.content || '').slice(0, 60)}...</p>
+        <button class="history-view-btn mt-2" onclick="showOutputModal('${escape(item.content || '')}','${item.type || ''}')">View</button>
+        <button class="history-delete-btn text-xl" onclick="deleteHistoryItem(${i})"><i class="fa-solid fa-trash"></i></button>
+      </div>
+    `).join('');
+  }
+
+  function renderFullHistory() {
+    const list = document.getElementById('full-history-list');
+    if (!list) return;
+    if (!history.length) { list.innerHTML = '<p class="text-gray-600 text-sm text-center">No history yet</p>'; return; }
+    list.innerHTML = history.map((item, i) => `
+      <div class="history-item">
+        <p class="text-xs text-cyan-700 uppercase font-bold mb-1">${item.type || 'Script'}</p>
+        <p class="text-white font-bold">${item.subtitle || item.title || ''}</p>
+        <p class="text-gray-500 text-xs mt-1">${(item.content || '').slice(0, 80)}...</p>
+        <div class="flex gap-2 mt-2">
+          <button class="history-view-btn" onclick="showOutputModal('${escape(item.content || '')}','${item.type || ''}')">View</button>
+          <button class="history-view-btn" onclick="speakHistoryItem(${i})">🔊 Speak</button>
+        </div>
+        <button class="history-delete-btn text-xl" onclick="deleteHistoryItem(${i})"><i class="fa-solid fa-trash"></i></button>
+      </div>
+    `).join('');
+  }
+
+  function speakHistoryItem(i) {
+    const item = history[i];
+    if (!item) return;
+    document.getElementById('tts-text').value = item.content || '';
+    navTo('tts');
+    setTimeout(startTTS, 300);
+  }
+
+  function deleteHistoryItem(index) {
+    history.splice(index, 1);
+    localStorage.setItem('barbanzoHistory', JSON.stringify(history));
+    renderFullHistory();
+    renderHistory();
+  }
+
+  function clearHistory() {
+    if (!confirm('Clear all history?')) return;
+    history = [];
+    localStorage.setItem('barbanzoHistory', JSON.stringify(history));
+    renderFullHistory();
+    renderHistory();
+  }
+
+  // ─── OUTPUT MODAL ─────────────────────────────────────────────────────────────
+  function showOutputModal(content, label) {
+    document.getElementById('modal-output').textContent = unescape(content);
+    document.getElementById('modal-label').textContent = label || '';
+    document.getElementById('output-modal').classList.remove('hidden');
+  }
+
+  function hideOutputModal() {
+    document.getElementById('output-modal').classList.add('hidden');
+  }
+
+  function copyModalOutput() {
+    const text = document.getElementById('modal-output').textContent;
+    navigator.clipboard.writeText(text).then(() => showToast('✓ Copied'));
+  }
+
+  // ─── ORIGINAL HOME GENERATE (preserved) ──────────────────────────────────────
+  function selectPreset(preset, el) {
+    selectedPreset = preset;
+    document.querySelectorAll('.preset-btn').forEach(btn => btn.classList.remove('active-preset'));
+    if (el) el.classList.add('active-preset');
+  }
+
+  async function generateScript() {
+    const prompt = document.getElementById('prompt-input').value.trim();
+    if (!prompt) { alert('Enter a prompt first'); return; }
+    if (!selectedPreset) { alert('Select a style preset'); return; }
+
+    let script = `BARBANZO SCRIPT:\n\nMETA:\nMODE: IMAGE\nTONE: ${selectedPreset.toUpperCase()}\n\nSUBJECT:\n${prompt}\n\nEND:\nAR: 9:16\nSTYLIZE: ISO\nMODE: RAW`;
+
+    if (anthropicKey) {
+      // Use Claude
+      const btn = document.getElementById('home-gen-btn');
+      btn.disabled = true; btn.innerHTML = '<span class="spin"></span>GENERATING...';
+      const system = 'You are an expert cinematic prompt engineer. Expand the given script structure into a rich, detailed, professional AI image prompt. Output only the final prompt text.';
+      const tempEl = document.createElement('pre');
+      tempEl.style.display = 'none';
+      document.body.appendChild(tempEl);
+      const result = await callClaude(system, script, tempEl, null);
+      document.body.removeChild(tempEl);
+      btn.disabled = false; btn.innerHTML = 'GENERATE';
+      if (result) { showOutputModal(result, 'Generated Script'); addToHistory('Script', selectedPreset, result); }
+    } else if (groqKey) {
+      await enhanceScript(script, null, true);
+    } else {
+      showOutputModal(script, 'Barbanzo Script');
+      addToHistory('Script', selectedPreset, script);
+    }
+  }
+
+  // ─── ORIGINAL GROQ (preserved) ────────────────────────────────────────────────
+  function saveKey() {
+    groqKey = document.getElementById('groq-key').value.trim();
+    if (groqKey) localStorage.setItem('groqKey', groqKey);
+    alert(groqKey ? 'Groq key saved' : 'Key required for Groq');
+  }
+
+  function saveGroqSettings() {
+    groqModel = document.getElementById('groq-model').value;
+    groqTemp = parseFloat(document.getElementById('groq-temp').value);
+    groqMaxTokens = parseInt(document.getElementById('groq-max-tokens').value);
+    groqStream = document.getElementById('groq-stream').checked;
+    groqSystemPrompt = document.getElementById('groq-system-prompt').value.trim();
+    localStorage.setItem('groqModel', groqModel);
+    localStorage.setItem('groqTemp', groqTemp);
+    localStorage.setItem('groqMaxTokens', groqMaxTokens);
+    localStorage.setItem('groqStream', groqStream);
+    localStorage.setItem('groqSystemPrompt', groqSystemPrompt);
+    alert('Groq settings saved');
+  }
+
+  function loadGroqSettings() {
+    const gm = document.getElementById('groq-model'); if (gm) gm.value = groqModel;
+    const gt = document.getElementById('groq-temp'); if (gt) { gt.value = groqTemp; document.getElementById('temp-value').textContent = groqTemp; }
+    const gmt = document.getElementById('groq-max-tokens'); if (gmt) gmt.value = groqMaxTokens;
+    const gs = document.getElementById('groq-stream'); if (gs) gs.checked = groqStream;
+    const gsp = document.getElementById('groq-system-prompt'); if (gsp) gsp.value = groqSystemPrompt;
+    const ak = document.getElementById('anthropic-key-input');
+    if (ak) ak.value = anthropicKey ? '••••••••••••••••' : '';
+  }
+
+  async function enhanceScript(current, mode = null, streamToModal = false) {
+    if (!groqKey) return 'No Groq key set';
+    const body = JSON.stringify({
+      model: groqModel,
+      messages: [{ role: 'system', content: groqSystemPrompt }, { role: 'user', content: current }],
+      temperature: groqTemp, max_tokens: groqMaxTokens, stream: groqStream
+    });
+    try {
+      const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${groqKey}`, 'Content-Type': 'application/json' },
+        body
+      });
+      if (!res.ok) { const e = await res.json(); return `Groq error: ${e.error?.message || 'Unknown'}`; }
+
+      if (groqStream) {
+        const reader = res.body.getReader();
+        let outputEl = mode ? document.getElementById(mode + '-out') : document.getElementById('modal-output');
+        if (!mode) { document.getElementById('modal-label').textContent = 'Generated Script'; document.getElementById('output-modal').classList.remove('hidden'); }
+        outputEl.textContent = '';
+        let full = '';
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          const lines = new TextDecoder().decode(value).split('\n');
+          for (const line of lines) {
+            if (line.startsWith('data: ')) {
+              const d = line.slice(6);
+              if (d === '[DONE]') continue;
+              try { const p = JSON.parse(d); const delta = p.choices[0].delta.content; if (delta) { full += delta; outputEl.textContent = full; } } catch {}
+            }
+          }
+        }
+        addToHistory('Script (Groq)', selectedPreset || 'enhanced', full);
+        return full;
+      } else {
+        const data = await res.json();
+        const content = data.choices?.[0]?.message?.content || 'Groq error';
+        if (mode) document.getElementById(mode + '-out').textContent = content;
+        else { showOutputModal(content, 'Generated Script'); }
+        addToHistory('Script (Groq)', selectedPreset || 'enhanced', content);
+        return content;
+      }
+    } catch(e) { return `Groq error: ${e.message}`; }
+  }
+
+  // ─── ORIGINAL BEGINNER / EXPERT (preserved) ───────────────────────────────────
+  function executeBeginner() {
+    let script = `BARBANZO SCRIPT:\n\n`;
+    ['meta','subject','camera','lighting','env','motion','atmo','style'].forEach(m => {
+      const val = document.getElementById(`b-${m}`).value.trim();
+      script += `${m.toUpperCase().replace('ENV','ENVIRONMENT').replace('ATMO','ATMOSPHERE')}:\n${val}\n\n`;
+    });
+    script += `END:\n  AR: 9:16\n  STYLIZE: ISO\n  MODE: RAW`;
+    const out = document.getElementById('beginner-out');
+    out.textContent = script; out.classList.remove('hidden');
+    document.getElementById('enhance-btn-b').classList.remove('hidden');
+  }
+
+  function executeExpert() {
+    const out = document.getElementById('expert-out');
+    out.textContent = document.getElementById('expert-text').value.trim();
+    out.classList.remove('hidden');
+    document.getElementById('enhance-btn-e').classList.remove('hidden');
+  }
+
+  async function enhanceWithGroq(mode) {
+    if (!groqKey) return alert('Save Groq key first in Settings');
+    const outEl = document.getElementById(mode + '-out');
+    const current = outEl.textContent;
+    outEl.textContent = 'Calling Groq — staying 100% faithful to Brother...';
+    await enhanceScript(current, mode);
+  }
+
+  function copyOutput(id) {
+    const text = document.getElementById(id).textContent;
+    navigator.clipboard.writeText(text).then(() => showToast('✓ Copied'));
+  }
+
+  function saveToHistory(id) {
+    const content = document.getElementById(id).textContent;
+    const title = prompt('Enter title for this script:');
+    if (title) { addToHistory('Script', title, content); showToast('Saved to history'); }
+  }
+
+  // ─── CERTS (original) ─────────────────────────────────────────────────────────
+  function renderCerts() {
+    const container = document.getElementById('cert-list');
+    if (!container) return;
+    container.innerHTML = certs.map((c, i) => `
+      <div class="bg-zinc-950 border border-gray-700 p-8 rounded-3xl text-center">
+        <div class="text-xs text-gray-400">CERT #${i+1}</div>
+        <div class="text-2xl font-black chrome script-font mt-2">BARBANZO SCRIPT MASTER</div>
+      </div>
+    `).join('');
+  }
+
+  function issueCert() {
+    certs.unshift({});
+    localStorage.setItem('barbanzoCerts', JSON.stringify(certs));
+    renderCerts();
+  }
+
+  function showHelp() { document.getElementById('help-modal').classList.remove('hidden'); }
+  function hideHelp() { document.getElementById('help-modal').classList.add('hidden'); }
+</script>
+</body>
+</html>
